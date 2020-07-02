@@ -22,6 +22,25 @@ NRF_LOG_MODULE_REGISTER();
 
 #define VERBOSE 0
 
+/**@brief   Check if a module has been initialized before allowing it to run
+ *
+ *@param[in]    ret         The value to return if the module isn't initialized.
+ */
+#if defined(DEBUG)
+#define VALID_LED(led, ret)                                                 \
+    do                                                                      \
+    {                                                                       \
+        if (((led) < BSP_BOARD_LED_0) || ((led) > BSP_BOARD_LED_3))         \
+        {                                                                   \
+            NRF_LOG_ERROR("Invalid LED %d, ignoring", (led));               \
+            return ret;                                                     \
+        }                                                                   \
+    } while (0)
+#elif defined(RELEASE)
+#define MODULE_INITIALIZED(ret)
+#else
+#error DEBUG or RELEASE must be defined
+#endif
 /**@brief   Enumeration of possible LED states.
  */
 typedef enum
@@ -292,11 +311,7 @@ void led_on(uint8_t led)
 {
     MODULE_INITIALIZED();
 
-    if ((led < BSP_BOARD_LED_0) || (led > BSP_BOARD_LED_1))
-    {
-        NRF_LOG_ERROR("Invalid LED %d, ignoring", led);
-        return;
-    }
+    VALID_LED(led, );
 
     led_event_t event;
 
@@ -315,11 +330,7 @@ void led_off(uint8_t led)
 {
     MODULE_INITIALIZED();
 
-    if ((led < BSP_BOARD_LED_0) || (led > BSP_BOARD_LED_1))
-    {
-        NRF_LOG_ERROR("Invalid LED %d, ignoring", led);
-        return;
-    }
+    VALID_LED(led, );
 
     led_event_t event;
 
@@ -343,11 +354,7 @@ void led_pattern(uint8_t led, uint8_t reps, uint16_t on_ms, uint16_t off_ms, uin
 {
     MODULE_INITIALIZED();
 
-    if ((led < BSP_BOARD_LED_0) || (led > BSP_BOARD_LED_1))
-    {
-        NRF_LOG_ERROR("Invalid LED %d, ignoring", led);
-        return;
-    }
+    VALID_LED(led, );
 
     led_event_t event;
 
@@ -370,11 +377,7 @@ const char * led_name(uint8_t led)
 {
     MODULE_INITIALIZED(NULL);
 
-    if ((led < BSP_BOARD_LED_0) || (led > BSP_BOARD_LED_1))
-    {
-        NRF_LOG_ERROR("Invalid LED %d, ignoring", led);
-        return NULL;
-    }
+    VALID_LED(led, NULL);
 
     return m_name_map[led].name;
 }
