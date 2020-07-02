@@ -212,6 +212,9 @@ int main(void)
     // Initialize modules.
     timers_init();
 
+    // Configure board LED pins as outputs
+    bsp_board_init(BSP_INIT_LEDS);
+
     // Create FSM's
     led_init();
 
