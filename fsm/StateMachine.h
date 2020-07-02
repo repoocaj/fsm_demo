@@ -23,15 +23,15 @@ extern "C" {
 #endif
 
 // Define USE_SM_ALLOCATOR to use the fixed block allocator instead of heap
-#define USE_SM_ALLOCATOR
+//#define USE_SM_ALLOCATOR
 #ifdef USE_SM_ALLOCATOR
     #include "sm_allocator.h"
     #define SM_XAlloc(size)    SMALLOC_Alloc(size)
     #define SM_XFree(ptr)      SMALLOC_Free(ptr)
 #else
-    #include <stdlib.h>
-    #define SM_XAlloc(size)    malloc(size)
-    #define SM_XFree(ptr)      free(ptr)
+    #include "FreeRTOS.h"
+    #define SM_XAlloc(size)    pvPortMalloc(size)
+    #define SM_XFree(ptr)      vPortFree(ptr)
 #endif
 
 enum { EVENT_IGNORED = 0xFE, CANNOT_HAPPEN = 0xFF };
