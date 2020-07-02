@@ -1,6 +1,11 @@
 #include "Fault.h"
 #include "StateMachine.h"
 
+#define NRF_LOG_MODULE_NAME     fsm
+#define NRF_LOG_LEVEL           4
+#include "nrf_log.h"
+NRF_LOG_MODULE_REGISTER();
+
 // Generates an external event. Called once per external event 
 // to start the state machine executing
 void _SM_ExternalEvent(SM_StateMachine* self, const SM_StateMachineConst* selfConst, BYTE newState, void* pEventData)
