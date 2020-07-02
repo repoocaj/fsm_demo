@@ -1,0 +1,21 @@
+#!/bin/bash
+name=`basename $0 .dot`
+type="pdf"
+if [ x"$1" != "x" ]; then
+        type=$1
+fi
+dot -T${type} -o$name.${type} << EOT
+### Start ###
+digraph simple_fsm {
+    # States
+    on      [label = "On"]
+    off     [label = "Off\nState"]
+
+    # Push Event
+    off     -> on       [label = "Push"]
+
+    # Release Event
+    on      -> off      [style = dashed label = "Release"]
+}
+### End ###
+EOT

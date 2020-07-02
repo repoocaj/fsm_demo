@@ -1,0 +1,11 @@
+digraph simple_fsm {
+    # States
+    on      [label = "On"]
+    off     [label = "Off\nState"]
+
+    # Push Event
+    off     -> on       [label = "Push"]
+
+    # Release Event
+    on      -> off      [style = dashed label = "Release"]
+}

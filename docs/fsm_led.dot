@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# Documents the finite state machine used to control the LEDs.
+#
+# The LED FSM can display the following states:
+#   Off
+#   On
+#   Simple Pulse: single (on time, off time), repeats
+#   Pattern Pulse: N reps (on time, off time), repeats with delay between pattern
+#
+name=`basename $0 .dot`
+if [ x"$1" != "x" ]; then
+        type=$1
+else
+        type="pdf"
+fi
+dot -T${type} -o$name.${type} << EOT
+###################
+### begin graph ###
+###################
+digraph led_fsm {
+    #rankdir=LR
+    { rank = same init initialize solid_off }
+    # States
+    init        [label="Init"]
+    initialize  [label="Initialize"]
+    solid_off   [label="Solid\nOff"]
+    solid_on    [label="Solid\nOn"]
+    pulse_start [label="Start\nPulse"]
+    pulse_on    [label="Pulse\nOn"]
+    pulse_off   [label="Pulse\nOff"]
+    rep_start   [label="Pattern\nStart"]
+    rep_delay   [label="Pattern\nDelay"]
+    rep_dec     [label="Decrement\nCount"]
+    # Init event
+    init       -> initialize  [label="Init"]
+    # Pulse event
+    edge [label="Pulse"]
+    solid_off  -> pulse_start
+    solid_on   -> pulse_start
+    pulse_start-> pulse_start
+    pulse_on   -> pulse_start
+    pulse_off  -> pulse_start
+    rep_delay  -> pulse_start
+    # On event
+    edge [label="On"]
+    solid_off  -> solid_on
+    pulse_start-> solid_on
+    pulse_on   -> solid_on
+    pulse_off  -> solid_on
+    rep_delay  -> solid_on
+    # Off event
+    edge [label="Off"]
+    solid_on   -> solid_off
+    pulse_start-> solid_off
+    pulse_on   -> solid_off
+    pulse_off  -> solid_off
+    rep_delay  -> solid_off
+    # Change event
+    edge [label="Timer\nExpired"]
+    pulse_on   -> pulse_off
+    pulse_off  -> rep_dec
+    rep_delay  -> rep_start
+    # Automatic events
+    edge [style=dashed label=""]
+    initialize -> solid_off
+    pulse_start-> rep_start
+    rep_start  -> pulse_on
+    rep_dec    -> rep_delay   [label="count == 0"]
+    rep_dec    -> rep_start   [label="delay == 0"]
+    rep_dec    -> pulse_on    [label="count > 0"]
+}
+###################
+###  end graph  ###
+###################
+EOT
