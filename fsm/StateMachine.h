@@ -56,6 +56,7 @@ typedef struct
     BYTE currentState;
     BOOL eventGenerated;
     void* pEventData;
+    BOOL verbose;
 } SM_StateMachine;
 
 // Generic state function signatures
@@ -98,7 +99,11 @@ void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfCo
 
 #define SM_DEFINE(_smName_, _instance_) \
     SM_StateMachine _smName_##Obj = { #_smName_, _instance_, \
-        0, 0, 0, 0 }; 
+        0, 0, 0, 0, 0 };
+
+#define SM_DEFINE_VERBOSE(_smName_, _instance_) \
+    SM_StateMachine _smName_##Obj = { #_smName_, _instance_, \
+        0, 0, 0, 0, 1 };
 
 #define EVENT_DECLARE(_eventFunc_, _eventData_) \
     void _eventFunc_(SM_StateMachine* self, _eventData_* pEventData);

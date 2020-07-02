@@ -13,6 +13,11 @@ void _SM_ExternalEvent(SM_StateMachine* self, const SM_StateMachineConst* selfCo
     // If we are supposed to ignore this event
     if (newState == EVENT_IGNORED) 
     {
+        if (self->verbose)
+        {
+            NRF_LOG_DEBUG("%s: current %d, event ignored", self->name, self->currentState);
+        }
+
         // Just delete the event data, if any
         if (pEventData)
             SM_XFree(pEventData);
@@ -72,6 +77,10 @@ void _SM_StateEngine(SM_StateMachine* self, const SM_StateMachineConst* selfCons
         self->eventGenerated = FALSE;
 
         // Switch to the new current state
+        if (self->verbose)
+        {
+            NRF_LOG_DEBUG("%s: %d -> %d", self->name, self->currentState, self->newState);
+        }
         self->currentState = self->newState;
 
         // Execute the state action passing in event data
@@ -140,6 +149,10 @@ void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfCo
             }
 
             // Switch to the new current state
+            if (self->verbose)
+            {
+                NRF_LOG_DEBUG("%s: %d -> %d", self->name, self->currentState, self->newState);
+            }
             self->currentState = self->newState;
 
             // Execute the state action passing in event data
