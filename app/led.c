@@ -9,7 +9,6 @@
 #define NRF_LOG_MODULE_NAME     led
 #define NRF_LOG_LEVEL           4
 #include "nrf_log.h"
-
 NRF_LOG_MODULE_REGISTER();
 
 #include "nrf_log_ctrl.h"
@@ -22,9 +21,10 @@ NRF_LOG_MODULE_REGISTER();
 
 #define VERBOSE 0
 
-/**@brief   Check if a module has been initialized before allowing it to run
+/**@brief   Check if the led parameter is valid
  *
- *@param[in]    ret         The value to return if the module isn't initialized.
+ *@param[in]    led         The LED value to test.
+ *@param[in]    ret         The value to return if LED value isn't valid.
  */
 #if defined(DEBUG)
 #define VALID_LED(led, ret)                                                 \
@@ -36,11 +36,10 @@ NRF_LOG_MODULE_REGISTER();
             return ret;                                                     \
         }                                                                   \
     } while (0)
-#elif defined(RELEASE)
-#define MODULE_INITIALIZED(ret)
 #else
-#error DEBUG or RELEASE must be defined
+#define VALID_LED(led, ret)
 #endif
+
 /**@brief   Enumeration of possible LED states.
  */
 typedef enum

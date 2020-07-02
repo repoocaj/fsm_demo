@@ -28,10 +28,8 @@ extern "C" {
             return ret;                                                     \
         }                                                                   \
     } while (0)
-#elif defined(RELEASE)
-#define MODULE_INITIALIZED(ret)
 #else
-#error DEBUG or RELEASE must be defined
+#define MODULE_INITIALIZED(ret)
 #endif
 
 
