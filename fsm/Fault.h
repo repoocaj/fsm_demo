@@ -11,9 +11,6 @@ extern "C" {
 #define C_ASSERT(expr)  {char uname[(expr)?1:-1];uname[0]=0;}
 #endif
 
-#define ASSERT() \
-	FaultHandler(__FILE__, (unsigned short) __LINE__)
-
 #define ASSERT_TRUE(condition) \
 	do {if (!(condition)) FaultHandler(__FILE__, (unsigned short) __LINE__);} while (0)
 
