@@ -134,7 +134,7 @@ void _SM_StateEngineEx(SM_StateMachine* self, const SM_StateMachineConst* selfCo
     static const SM_StateStruct _smName_##StateMap[] = { 
 
 #define STATE_MAP_ENTRY(_stateFunc_) \
-    { _stateFunc_ },
+    { (SM_StateFunc)ST_##_stateFunc_ },
 
 #define END_STATE_MAP(_smName_) \
     }; \
