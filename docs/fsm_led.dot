@@ -42,6 +42,14 @@ digraph led_fsm {
     pulse_on   -> pulse_start
     pulse_off  -> pulse_start
     rep_delay  -> pulse_start
+    # Button event
+    edge [label="Button"]
+    solid_off  -> solid_off
+    solid_on   -> solid_off
+    pulse_start-> solid_off
+    pulse_on   -> solid_off
+    pulse_off  -> solid_off
+    rep_delay  -> solid_off
     # On event
     edge [label="On"]
     solid_off  -> solid_on
